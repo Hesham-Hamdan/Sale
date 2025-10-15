@@ -1,10 +1,9 @@
 const express = require("express");
 const formidable = require("express-formidable");
-const { isValidObjectId } = require("mongoose");
 const router = express.Router();
 
-// --- Controllers ---
-import {
+// controllers
+const {
   addProduct,
   updateProductDetails,
   removeProduct,
@@ -15,23 +14,14 @@ import {
   fetchTopProducts,
   fetchNewProducts,
   filterProducts,
-} from "../controllers/productController.js";
+} = require("../controllers/productController.js");
 
-// --- Middlewares ---
-import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
-// NOTE: The import for 'checkId' has been removed for this test.
-
-// --- INLINE MIDDLEWARE FOR DEBUGGING ---
-// The logic from checkId.js has been moved directly into this file.
-// This test will prove if the module import system is the source of the error.
-function checkId(req, res, next) {
-  if (!isValidObjectId(req.params.id)) {
-    res.status(404);
-    throw new Error(`Invalid Object ID: ${req.params.id}`);
-  }
-  next();
-}
-// --- END INLINE MIDDLEWARE ---
+// middlewares
+const {
+  authenticate,
+  authorizeAdmin,
+} = require("../middlewares/authMiddleware.js");
+const checkId = require("../middlewares/checkId.js");
 
 router
   .route("/")
@@ -39,8 +29,6 @@ router
   .post(authenticate, authorizeAdmin, formidable(), addProduct);
 
 router.route("/allproducts").get(fetchAllProducts);
-
-// The 'checkId' function being used here is now the one defined locally in this file.
 router.route("/:id/reviews").post(authenticate, checkId, addProductReview);
 
 router.get("/top", fetchTopProducts);

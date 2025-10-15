@@ -1,4 +1,7 @@
 const express = require("express");
+const router = express.Router();
+
+// controllers
 const {
   createCategory,
   updateCategory,
@@ -7,20 +10,17 @@ const {
   readCategory,
 } = require("../controllers/categoryController.js");
 
+// middlewares
 const {
   authenticate,
   authorizeAdmin,
 } = require("../middlewares/authMiddleware.js");
-const router = express.Router();
 
 router.route("/").post(authenticate, authorizeAdmin, createCategory);
-router
-  .route("/:categoryId")
-  .patch(authenticate, authorizeAdmin, updateCategory);
+router.route("/:categoryId").put(authenticate, authorizeAdmin, updateCategory);
 router
   .route("/:categoryId")
   .delete(authenticate, authorizeAdmin, removeCategory);
-
 router.route("/categories").get(listCategory);
 router.route("/:id").get(readCategory);
 
