@@ -17,7 +17,17 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+const frontendURL = [
+  "https://sale-frontend.netlify.app",
+  "https://deploy-preview-4--sale-frontend.netlify.app",
+];
+
+app.use(
+  cors({
+    origin: frontendURL, // Your live frontend URL
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
