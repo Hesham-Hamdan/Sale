@@ -1,5 +1,8 @@
-import express from "express";
-import {
+const express = require("express");
+const router = express.Router();
+
+// controllers
+const {
   createUser,
   loginUser,
   logoutCurrentUser,
@@ -9,27 +12,31 @@ import {
   deleteUserById,
   getUserById,
   updateUserById,
-} from "../controllers/userController.js";
-import { authorizeAdmin, authenticate } from "../middlewares/authMiddleware.js";
+} = require("../controllers/userController.js");
 
-const router = express.Router();
+// middlewares
+const {
+  authenticate,
+  authorizeAdmin,
+} = require("../middlewares/authMiddleware.js");
 
 router
   .route("/")
   .post(createUser)
   .get(authenticate, authorizeAdmin, getAllUsers);
+
 router.post("/auth", loginUser);
 router.post("/logout", logoutCurrentUser);
 
 router
   .route("/profile")
   .get(authenticate, getCurrentUserProfile)
-  .patch(authenticate, updateCurrentUserProfile);
+  .put(authenticate, updateCurrentUserProfile);
 
 router
   .route("/:id")
   .delete(authenticate, authorizeAdmin, deleteUserById)
   .get(authenticate, authorizeAdmin, getUserById)
-  .patch(authenticate, authorizeAdmin, updateUserById);
+  .put(authenticate, authorizeAdmin, updateUserById);
 
-export default router;
+module.exports = router;
