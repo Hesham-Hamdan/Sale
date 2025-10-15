@@ -20,10 +20,7 @@ const {
   authorizeAdmin,
 } = require("../middlewares/authMiddleware.js");
 
-router
-  .route("/")
-  .post(authenticate, createOrder)
-  .get(authenticate, authorizeAdmin, getAllOrders);
+router.route("/").post(authenticate, createOrder).get(getAllOrders);
 
 router.route("/mine").get(authenticate, getUserOrders);
 router.route("/total-orders").get(countTotalOrders);
