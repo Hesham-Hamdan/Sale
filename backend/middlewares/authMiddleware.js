@@ -1,10 +1,9 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const asyncHandler = require("./asyncHandler.js");
 
-export const authenticate = asyncHandler(async (req, res, next) => {
+// Note: asyncHandler has been removed. 'express-async-errors' handles this automatically.
+
+export const authenticate = async (req, res, next) => {
   let token;
 
   // Read token from the 'jwt' cookie
@@ -13,7 +12,7 @@ export const authenticate = asyncHandler(async (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.userId);
+      req.user = await User.findById(decoded.userId).select("-password");
       next();
     } catch (error) {
       res.status(401);
@@ -23,7 +22,7 @@ export const authenticate = asyncHandler(async (req, res, next) => {
     res.status(401);
     throw new Error("Not Authorized. No Token");
   }
-});
+};
 
 export const authorizeAdmin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {

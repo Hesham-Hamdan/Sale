@@ -1,11 +1,10 @@
 import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const asyncHandler = require("../middlewares/asyncHandler.js");
 
-export const createUser = asyncHandler(async (req, res) => {
+// Note: The asyncHandler wrapper has been removed from all functions.
+
+export const createUser = async (req, res) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
@@ -14,7 +13,10 @@ export const createUser = asyncHandler(async (req, res) => {
 
   const userExists = await User.findOne({ email });
 
-  if (userExists) res.status(400).send("User already exists");
+  if (userExists) {
+    res.status(400).send("User already exists");
+    return;
+  }
 
   const newUser = new User({ email, username, password });
 
@@ -34,9 +36,9 @@ export const createUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error(error.message || "Invalid user data");
   }
-});
+};
 
-export const loginUser = asyncHandler(async (req, res) => {
+export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const existingUser = await User.findOne({ email }).select("+password");
 
@@ -60,15 +62,15 @@ export const loginUser = asyncHandler(async (req, res) => {
       isAdmin: existingUser.isAdmin,
     },
   });
-});
+};
 
-export const logoutCurrentUser = asyncHandler(async (req, res) => {
+export const logoutCurrentUser = async (req, res) => {
   res.cookie("jwt", "", { httpOnly: true, expires: new Date(0) });
   res.status(200).json({ message: "Logged out successfully" });
-});
+};
 
-export const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find();
+export const getAllUsers = async (req, res) => {
+  const users = await User.find({});
 
   res.status(200).json({
     success: true,
@@ -77,7 +79,7 @@ export const getAllUsers = asyncHandler(async (req, res) => {
       users,
     },
   });
-});
+};
 
 export const getCurrentUserProfile = (req, res) => {
   const user = req.user; // Use the user object from the middleware
@@ -90,7 +92,7 @@ export const getCurrentUserProfile = (req, res) => {
   });
 };
 
-export const updateCurrentUserProfile = asyncHandler(async (req, res) => {
+export const updateCurrentUserProfile = async (req, res) => {
   const user = req.user;
 
   user.username = req.body.username || user.username;
@@ -109,9 +111,9 @@ export const updateCurrentUserProfile = asyncHandler(async (req, res) => {
     email: updatedUser.email,
     isAdmin: updatedUser.isAdmin,
   });
-});
+};
 
-export const deleteUserById = asyncHandler(async (req, res) => {
+export const deleteUserById = async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (!user) {
@@ -120,9 +122,9 @@ export const deleteUserById = asyncHandler(async (req, res) => {
   }
   await user.deleteOne();
   res.status(204).json({ success: true });
-});
+};
 
-export const getUserById = asyncHandler(async (req, res) => {
+export const getUserById = async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (!user) {
@@ -131,9 +133,9 @@ export const getUserById = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json({ success: true, data: user });
-});
+};
 
-export const updateUserById = asyncHandler(async (req, res) => {
+export const updateUserById = async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (!user) {
@@ -147,4 +149,4 @@ export const updateUserById = asyncHandler(async (req, res) => {
 
   await user.save();
   res.status(200).json({ success: true, data: user });
-});
+};

@@ -1,9 +1,8 @@
 import Product from "../models/productModel.js";
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const asyncHandler = require("../middlewares/asyncHandler.js");
 
-const addProduct = asyncHandler(async (req, res) => {
+// Note: asyncHandler has been removed. 'express-async-errors' handles this automatically.
+
+const addProduct = async (req, res) => {
   try {
     const { name, description, price, category, quantity, brand } = req.fields;
 
@@ -30,9 +29,9 @@ const addProduct = asyncHandler(async (req, res) => {
     console.error(error);
     res.status(400).json(error.message);
   }
-});
+};
 
-const updateProductDetails = asyncHandler(async (req, res) => {
+const updateProductDetails = async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(
       req.params.id,
@@ -45,9 +44,9 @@ const updateProductDetails = asyncHandler(async (req, res) => {
     console.error(error);
     res.status(400).json(error.message);
   }
-});
+};
 
-const removeProduct = asyncHandler(async (req, res) => {
+const removeProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     res.json(product);
@@ -55,9 +54,9 @@ const removeProduct = asyncHandler(async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Server error" });
   }
-});
+};
 
-const fetchProducts = asyncHandler(async (req, res) => {
+const fetchProducts = async (req, res) => {
   try {
     const pageSize = 6;
 
@@ -83,9 +82,9 @@ const fetchProducts = asyncHandler(async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
   }
-});
+};
 
-const fetchProductById = asyncHandler(async (req, res) => {
+const fetchProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (product) {
@@ -98,11 +97,11 @@ const fetchProductById = asyncHandler(async (req, res) => {
     console.error(error);
     res.status(404).json({ error: "Product not found" });
   }
-});
+};
 
-const fetchAllProducts = asyncHandler(async (req, res) => {
+const fetchAllProducts = async (req, res) => {
   try {
-    const products = await Product.find()
+    const products = await Product.find({})
       .populate("category")
       .limit(12)
       .sort({ createAt: -1 });
@@ -112,9 +111,9 @@ const fetchAllProducts = asyncHandler(async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
   }
-});
+};
 
-const addProductReview = asyncHandler(async (req, res) => {
+const addProductReview = async (req, res) => {
   try {
     const { rating, comment } = req.body;
     const product = await Product.findById(req.params.id);
@@ -154,29 +153,29 @@ const addProductReview = asyncHandler(async (req, res) => {
     console.error(error);
     res.status(400).json(error.message);
   }
-});
+};
 
-const fetchTopProducts = asyncHandler(async (req, res) => {
+const fetchTopProducts = async (req, res) => {
   try {
-    const products = await Product.find().sort({ rating: -1 }).limit(4);
+    const products = await Product.find({}).sort({ rating: -1 }).limit(4);
     res.json(products);
   } catch (error) {
     console.error(error);
     res.status(400).json(error.message);
   }
-});
+};
 
-const fetchNewProducts = asyncHandler(async (req, res) => {
+const fetchNewProducts = async (req, res) => {
   try {
-    const products = await Product.find().sort({ _id: -1 }).limit(5);
+    const products = await Product.find({}).sort({ _id: -1 }).limit(5);
     res.json(products);
   } catch (error) {
     console.error(error);
     res.status(400).json(error.message);
   }
-});
+};
 
-const filterProducts = asyncHandler(async (req, res) => {
+const filterProducts = async (req, res) => {
   try {
     const { checked, radio } = req.body;
 
@@ -190,7 +189,7 @@ const filterProducts = asyncHandler(async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
   }
-});
+};
 
 export {
   addProduct,
