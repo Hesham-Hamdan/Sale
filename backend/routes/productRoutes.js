@@ -2,24 +2,32 @@ import express from "express";
 import formidable from "express-formidable";
 const router = express.Router();
 
-// controllers - Using named imports with curly braces
+// --- Controllers & Middlewares ---
 import {
   addProduct,
-  updateProductDetails,
-  removeProduct,
-  fetchProducts,
-  fetchProductById,
-  fetchAllProducts,
   addProductReview,
-  fetchTopProducts,
+  fetchAllProducts,
   fetchNewProducts,
+  fetchProductById,
+  fetchProducts,
+  fetchTopProducts,
   filterProducts,
+  removeProduct,
+  updateProductDetails,
 } from "../controllers/productController.js";
-
-// middlewares - Using named imports for authenticate/authorizeAdmin
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
-// middlewares - Using a default import for checkId
 import checkId from "../middlewares/checkId.js";
+
+// --- 🧐 DEBUGGING BLOCK ---
+// These logs will appear in your Netlify Deploy Log.
+console.log("--- DEBUGGING IMPORTS ---");
+console.log("Type of 'addProduct':", typeof addProduct);
+console.log("Type of 'addProductReview':", typeof addProductReview);
+console.log("Type of 'authenticate':", typeof authenticate);
+console.log("Type of 'authorizeAdmin':", typeof authorizeAdmin);
+console.log("Type of 'checkId':", typeof checkId);
+console.log("--------------------------");
+// --- END DEBUGGING BLOCK ---
 
 router
   .route("/")
@@ -27,6 +35,8 @@ router
   .post(authenticate, authorizeAdmin, formidable(), addProduct);
 
 router.route("/allproducts").get(fetchAllProducts);
+
+// This is the line that crashes. The logs above will tell us which of these is not a function.
 router.route("/:id/reviews").post(authenticate, checkId, addProductReview);
 
 router.get("/top", fetchTopProducts);
@@ -35,7 +45,7 @@ router.get("/new", fetchNewProducts);
 router
   .route("/:id")
   .get(fetchProductById)
-  .patch(authenticate, authorizeAdmin, formidable(), updateProductDetails) // Note: Changed to PUT for consistency, but patch is also fine.
+  .put(authenticate, authorizeAdmin, formidable(), updateProductDetails)
   .delete(authenticate, authorizeAdmin, removeProduct);
 
 router.route("/filtered-products").post(filterProducts);
