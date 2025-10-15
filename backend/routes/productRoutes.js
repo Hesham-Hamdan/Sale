@@ -1,6 +1,6 @@
-import express from "express";
-import formidable from "express-formidable";
-import { isValidObjectId } from "mongoose";
+const express = require("express");
+const formidable = require("express-formidable");
+const { isValidObjectId } = require("mongoose");
 const router = express.Router();
 
 // --- Controllers ---
@@ -54,4 +54,4 @@ router
 
 router.route("/filtered-products").post(filterProducts);
 
-export default router;
+module.exports = router;

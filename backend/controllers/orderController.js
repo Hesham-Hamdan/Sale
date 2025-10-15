@@ -1,5 +1,5 @@
-import Order from "../models/orderModel.js";
-import Product from "../models/productModel.js";
+const Order = require("../models/orderModel.js");
+const Product = require("../models/productModel.js");
 
 // Utility Function
 function calcPrices(orderItems) {
@@ -201,7 +201,7 @@ const markOrderAsDelivered = async (req, res) => {
   }
 };
 
-export {
+module.exports = {
   createOrder,
   getAllOrders,
   getUserOrders,

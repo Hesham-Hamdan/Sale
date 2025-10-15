@@ -1,4 +1,4 @@
-import { isValidObjectId } from "mongoose";
+const { isValidObjectId } = require("mongoose");
 
 // This is a standard middleware function.
 function checkId(req, res, next) {
@@ -10,5 +10,5 @@ function checkId(req, res, next) {
   next();
 }
 
-// The key fix: Use 'export default' because this is the only thing in the file.
-export default checkId;
+// Use 'module.exports' for CommonJS.
+module.exports = checkId;

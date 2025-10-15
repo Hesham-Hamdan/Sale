@@ -1,7 +1,8 @@
-import express from "express";
+const express = require("express");
 const router = express.Router();
 
-import {
+// controllers
+const {
   createOrder,
   getAllOrders,
   getUserOrders,
@@ -11,9 +12,13 @@ import {
   findOrderById,
   markOrderAsPaid,
   markOrderAsDelivered,
-} from "../controllers/orderController.js";
+} = require("../controllers/orderController.js");
 
-import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
+// middlewares
+const {
+  authenticate,
+  authorizeAdmin,
+} = require("../middlewares/authMiddleware.js");
 
 router
   .route("/")
@@ -30,4 +35,4 @@ router
   .route("/:id/deliver")
   .patch(authenticate, authorizeAdmin, markOrderAsDelivered);
 
-export default router;
+module.exports = router;

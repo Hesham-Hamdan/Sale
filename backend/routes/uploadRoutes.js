@@ -1,8 +1,8 @@
-import express from "express";
-import multer from "multer";
-import { v2 as cloudinary } from "cloudinary";
-import streamifier from "streamifier";
-import dotenv from "dotenv";
+const express = require("express");
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -66,4 +66,4 @@ router.post("/", upload.single("image"), async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

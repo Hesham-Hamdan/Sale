@@ -1,4 +1,4 @@
-import Category from "../models/categoryModel.js";
+const Category = require("../models/categoryModel.js");
 
 // Note: asyncHandler has been removed. 'express-async-errors' handles this automatically.
 
@@ -75,7 +75,7 @@ const readCategory = async (req, res) => {
   }
 };
 
-export {
+module.exports = {
   createCategory,
   updateCategory,
   removeCategory,

@@ -5,7 +5,6 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const ServerlessHttp = require("serverless-http");
 
-// THE FIX: Use 'require' to import the CommonJS db.js module correctly.
 const connectDB = require("../../config/db.js");
 const userRoutes = require("../../routes/userRoutes.js");
 const categoryRoutes = require("../../routes/categoryRoutes.js");

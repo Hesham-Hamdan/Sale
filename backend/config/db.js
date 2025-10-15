@@ -10,5 +10,4 @@ const connectDB = async () => {
   }
 };
 
-// THE FIX: Use the CommonJS 'module.exports' to bypass the ESM caching issue.
 module.exports = connectDB;
