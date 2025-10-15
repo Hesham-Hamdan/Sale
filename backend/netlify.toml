@@ -1,0 +1,25 @@
+# This file configures your Netlify deployment and development server.
+
+[build]
+  # This tells Netlify where your serverless functions are located.
+  functions = "netlify/functions"
+
+# The [dev] block gives the Netlify CLI explicit instructions for the local dev server.
+[dev]
+  # We can also explicitly point to the functions directory for clarity.
+  functions = "netlify/functions"
+  # This tells the local server to use the current directory for static files.
+  # It helps resolve the "Unable to determine public folder" error.
+  publish = "."
+
+# This is the crucial part for making `netlify dev` work.
+# It tells the local server (and the live site) how to handle API requests.
+[[redirects]]
+  # Match any URL path that starts with /api/
+  from = "/api/*"
+  # And forward it to your single 'api.js' function.
+  # The ":splat" at the end is a placeholder that passes the rest of the URL.
+  to = "/.netlify/functions/api/:splat"
+  # A status of 200 is important. It makes this rewrite rule work like a proxy,
+  # which is necessary for handling different HTTP methods (GET, POST, etc.).
+  status = 200

@@ -1,0 +1,26 @@
+/* @import "tailwindcss";
+body {
+  background: #0f0f10;
+  color: #fff;
+}
+
+input,
+textarea {
+  background-color: #242424;
+  color: white;
+} */
+
+@import "tailwindcss";
+body {
+  background: #0f0f10;
+  color: #fff;
+}
+
+/* Add 'select' to this rule */
+input,
+textarea,
+select {
+  background-color: #242424;
+  color: white;
+  border-color: #404040; /* A matching border color */
+}

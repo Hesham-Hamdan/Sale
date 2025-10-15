@@ -1,0 +1,10 @@
+#navigation-container {
+  width: 5%;
+  /* A slightly longer duration and a custom cubic-bezier for a smoother effect */
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+#navigation-container:hover {
+  width: 15%; /* Example hover state */
+}
