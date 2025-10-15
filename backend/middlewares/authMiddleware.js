@@ -1,14 +1,9 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
-// Note: asyncHandler has been removed. 'express-async-errors' handles this automatically.
-
+// Both functions are exported as NAMED exports.
 export const authenticate = async (req, res, next) => {
-  let token;
-
-  // Read token from the 'jwt' cookie
-  token = req.cookies.jwt;
-
+  let token = req.cookies.jwt;
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -28,6 +23,6 @@ export const authorizeAdmin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     next();
   } else {
-    return res.status(401).send("Not Authorized as an admin");
+    res.status(401).send("Not Authorized as an admin");
   }
 };

@@ -1,5 +1,6 @@
 import { isValidObjectId } from "mongoose";
 
+// This function is exported as a DEFAULT export.
 function checkId(req, res, next) {
   if (!isValidObjectId(req.params.id)) {
     res.status(404);
