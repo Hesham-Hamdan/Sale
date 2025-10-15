@@ -2,32 +2,24 @@ import express from "express";
 import formidable from "express-formidable";
 const router = express.Router();
 
-// --- Controllers & Middlewares ---
+// --- Controllers ---
 import {
   addProduct,
-  addProductReview,
-  fetchAllProducts,
-  fetchNewProducts,
-  fetchProductById,
-  fetchProducts,
-  fetchTopProducts,
-  filterProducts,
-  removeProduct,
   updateProductDetails,
+  removeProduct,
+  fetchProducts,
+  fetchProductById,
+  fetchAllProducts,
+  addProductReview,
+  fetchTopProducts,
+  fetchNewProducts,
+  filterProducts,
 } from "../controllers/productController.js";
-import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
-import checkId from "../middlewares/checkId.js";
 
-// --- 🧐 DEBUGGING BLOCK ---
-// These logs will appear in your Netlify Deploy Log.
-console.log("--- DEBUGGING IMPORTS ---");
-console.log("Type of 'addProduct':", typeof addProduct);
-console.log("Type of 'addProductReview':", typeof addProductReview);
-console.log("Type of 'authenticate':", typeof authenticate);
-console.log("Type of 'authorizeAdmin':", typeof authorizeAdmin);
-console.log("Type of 'checkId':", typeof checkId);
-console.log("--------------------------");
-// --- END DEBUGGING BLOCK ---
+// --- Middlewares ---
+import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
+// This import is now correct because checkId.js uses 'export default'.
+import checkId from "../middlewares/checkId.js";
 
 router
   .route("/")
@@ -35,8 +27,6 @@ router
   .post(authenticate, authorizeAdmin, formidable(), addProduct);
 
 router.route("/allproducts").get(fetchAllProducts);
-
-// This is the line that crashes. The logs above will tell us which of these is not a function.
 router.route("/:id/reviews").post(authenticate, checkId, addProductReview);
 
 router.get("/top", fetchTopProducts);
