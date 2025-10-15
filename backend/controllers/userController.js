@@ -1,18 +1,9 @@
-import asyncHandler from "../middlewares/asyncHandler.js";
+import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
-import bcrypt from "bcryptjs";
-
-// const checkingUser = asyncHandler(async (req, res) => {
-//   const user = await User.findById(req.params.id);
-
-//   if (!user) {
-//     res.status(404);
-//     throw new Error("User not found");
-//   }
-
-//   return user;
-// });
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const asyncHandler = require("../middlewares/asyncHandler.js");
 
 export const createUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;

@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
-import asyncHandler from "./asyncHandler.js";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const asyncHandler = require("./asyncHandler.js");
 
 export const authenticate = asyncHandler(async (req, res, next) => {
   let token;

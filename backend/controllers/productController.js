@@ -1,5 +1,7 @@
-import asyncHandler from "../middlewares/asyncHandler.js";
 import Product from "../models/productModel.js";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const asyncHandler = require("../middlewares/asyncHandler.js");
 
 const addProduct = asyncHandler(async (req, res) => {
   try {
