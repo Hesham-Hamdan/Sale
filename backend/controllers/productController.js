@@ -1,8 +1,8 @@
 import Product from "../models/productModel.js";
 
-// Note: asyncHandler has been removed. 'express-async-errors' handles this automatically.
+// All functions here use NAMED EXPORTS, which is why the route file must import them with {}.
 
-const addProduct = async (req, res) => {
+export const addProduct = async (req, res) => {
   try {
     const { name, description, price, category, quantity, brand } = req.fields;
 
@@ -31,7 +31,7 @@ const addProduct = async (req, res) => {
   }
 };
 
-const updateProductDetails = async (req, res) => {
+export const updateProductDetails = async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(
       req.params.id,
@@ -46,7 +46,7 @@ const updateProductDetails = async (req, res) => {
   }
 };
 
-const removeProduct = async (req, res) => {
+export const removeProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     res.json(product);
@@ -56,7 +56,7 @@ const removeProduct = async (req, res) => {
   }
 };
 
-const fetchProducts = async (req, res) => {
+export const fetchProducts = async (req, res) => {
   try {
     const pageSize = 6;
 
@@ -84,7 +84,7 @@ const fetchProducts = async (req, res) => {
   }
 };
 
-const fetchProductById = async (req, res) => {
+export const fetchProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (product) {
@@ -99,7 +99,7 @@ const fetchProductById = async (req, res) => {
   }
 };
 
-const fetchAllProducts = async (req, res) => {
+export const fetchAllProducts = async (req, res) => {
   try {
     const products = await Product.find({})
       .populate("category")
@@ -113,7 +113,7 @@ const fetchAllProducts = async (req, res) => {
   }
 };
 
-const addProductReview = async (req, res) => {
+export const addProductReview = async (req, res) => {
   try {
     const { rating, comment } = req.body;
     const product = await Product.findById(req.params.id);
@@ -136,9 +136,7 @@ const addProductReview = async (req, res) => {
       };
 
       product.reviews.push(review);
-
       product.numReviews = product.reviews.length;
-
       product.rating =
         product.reviews.reduce((acc, item) => item.rating + acc, 0) /
         product.reviews.length;
@@ -155,7 +153,7 @@ const addProductReview = async (req, res) => {
   }
 };
 
-const fetchTopProducts = async (req, res) => {
+export const fetchTopProducts = async (req, res) => {
   try {
     const products = await Product.find({}).sort({ rating: -1 }).limit(4);
     res.json(products);
@@ -165,7 +163,7 @@ const fetchTopProducts = async (req, res) => {
   }
 };
 
-const fetchNewProducts = async (req, res) => {
+export const fetchNewProducts = async (req, res) => {
   try {
     const products = await Product.find({}).sort({ _id: -1 }).limit(5);
     res.json(products);
@@ -175,7 +173,7 @@ const fetchNewProducts = async (req, res) => {
   }
 };
 
-const filterProducts = async (req, res) => {
+export const filterProducts = async (req, res) => {
   try {
     const { checked, radio } = req.body;
 
@@ -189,17 +187,4 @@ const filterProducts = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
   }
-};
-
-export {
-  addProduct,
-  updateProductDetails,
-  removeProduct,
-  fetchProducts,
-  fetchProductById,
-  fetchAllProducts,
-  addProductReview,
-  fetchTopProducts,
-  fetchNewProducts,
-  filterProducts,
 };
