@@ -1,7 +1,8 @@
-import Category from "../models/categoryModel.js";
-import asyncHandler from "../middlewares/asyncHandler.js";
+const Category = require("../models/categoryModel.js");
 
-const createCategory = asyncHandler(async (req, res) => {
+// Note: asyncHandler has been removed. 'express-async-errors' handles this automatically.
+
+const createCategory = async (req, res) => {
   try {
     const { name } = req.body;
 
@@ -21,9 +22,9 @@ const createCategory = asyncHandler(async (req, res) => {
     console.log(error);
     return res.status(400).json(error);
   }
-});
+};
 
-const updateCategory = asyncHandler(async (req, res) => {
+const updateCategory = async (req, res) => {
   try {
     const { name } = req.body;
     const { categoryId } = req.params;
@@ -42,9 +43,9 @@ const updateCategory = asyncHandler(async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-const removeCategory = asyncHandler(async (req, res) => {
+const removeCategory = async (req, res) => {
   try {
     const removed = await Category.findByIdAndDelete(req.params.categoryId);
     res.json(removed);
@@ -52,19 +53,19 @@ const removeCategory = asyncHandler(async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
-const listCategory = asyncHandler(async (req, res) => {
+const listCategory = async (req, res) => {
   try {
-    const all = await Category.find();
+    const all = await Category.find({});
     res.json(all);
   } catch (error) {
     console.log(error);
     return res.status(400).json(error.message);
   }
-});
+};
 
-const readCategory = asyncHandler(async (req, res) => {
+const readCategory = async (req, res) => {
   try {
     const category = await Category.findOne({ _id: req.params.id });
     res.json(category);
@@ -72,9 +73,9 @@ const readCategory = asyncHandler(async (req, res) => {
     console.log(error);
     return res.status(400).json(error.message);
   }
-});
+};
 
-export {
+module.exports = {
   createCategory,
   updateCategory,
   removeCategory,

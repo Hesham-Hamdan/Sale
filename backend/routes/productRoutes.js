@@ -1,9 +1,9 @@
-import express from "express";
-import formidable from "express-formidable";
+const express = require("express");
+const formidable = require("express-formidable");
 const router = express.Router();
 
 // controllers
-import {
+const {
   addProduct,
   updateProductDetails,
   removeProduct,
@@ -14,9 +14,14 @@ import {
   fetchTopProducts,
   fetchNewProducts,
   filterProducts,
-} from "../controllers/productController.js";
-import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
-import checkId from "../middlewares/checkId.js";
+} = require("../controllers/productController.js");
+
+// middlewares
+const {
+  authenticate,
+  authorizeAdmin,
+} = require("../middlewares/authMiddleware.js");
+const checkId = require("../middlewares/checkId.js");
 
 router
   .route("/")
@@ -32,9 +37,9 @@ router.get("/new", fetchNewProducts);
 router
   .route("/:id")
   .get(fetchProductById)
-  .patch(authenticate, authorizeAdmin, formidable(), updateProductDetails)
+  .put(authenticate, authorizeAdmin, formidable(), updateProductDetails)
   .delete(authenticate, authorizeAdmin, removeProduct);
 
 router.route("/filtered-products").post(filterProducts);
 
-export default router;
+module.exports = router;
