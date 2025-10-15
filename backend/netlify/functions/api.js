@@ -1,26 +1,20 @@
-import express from "express";
-import "express-async-errors";
-import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import ServerlessHttp from "serverless-http";
+const express = require("express");
+require("express-async-errors");
+const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const ServerlessHttp = require("serverless-http");
 
-import connectDB from "../../config/db.js";
-import userRoutes from "../../routes/userRoutes.js";
-import categoryRoutes from "../../routes/categoryRoutes.js";
-import productRoutes from "../../routes/productRoutes.js";
-import uploadRoutes from "../../routes/uploadRoutes.js";
-import orderRoutes from "../../routes/orderRoutes.js";
-
-// --- 🧐 DEBUGGING BLOCK ---
-// This log will appear in your Netlify FUNCTION LOG.
-console.log("--- DEBUGGING DATABASE IMPORT ---");
-console.log("Type of 'connectDB':", typeof connectDB);
-console.log("---------------------------------");
-// --- END DEBUGGING BLOCK ---
+// THE FIX: Use 'require' to import the CommonJS db.js module correctly.
+const connectDB = require("../../config/db.js");
+const userRoutes = require("../../routes/userRoutes.js");
+const categoryRoutes = require("../../routes/categoryRoutes.js");
+const productRoutes = require("../../routes/productRoutes.js");
+const uploadRoutes = require("../../routes/uploadRoutes.js");
+const orderRoutes = require("../../routes/orderRoutes.js");
 
 dotenv.config();
-connectDB(); // The error happens here.
+connectDB();
 
 const app = express();
 
@@ -39,3 +33,5 @@ apiRouter.get("/config/paypal", (req, res) => {
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
 });
 app.use("/api", apiRouter);
+
+module.exports.handler = ServerlessHttp(app);

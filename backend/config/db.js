@@ -1,13 +1,14 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("Successfully Connected to the Database");
-  } catch (err) {
-    console.error(`Error: ${err.message}`);
+    console.log("Successfully connected to MongoDB.");
+  } catch (error) {
+    console.error(`ERROR: ${error.message}`);
     process.exit(1);
   }
 };
 
-export default connectDB;
+// THE FIX: Use the CommonJS 'module.exports' to bypass the ESM caching issue.
+module.exports = connectDB;
