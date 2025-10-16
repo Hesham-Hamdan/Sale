@@ -166,7 +166,48 @@ const AdminDashboard = () => {
 
   const [state, setState] = useState({
     options: {
-      // ... (No changes to chart options)
+      chart: {
+        type: "line",
+      },
+      tooltip: {
+        theme: "dark",
+      },
+      colors: ["#00E396"],
+      dataLabels: {
+        enabled: true,
+      },
+      stroke: {
+        curve: "smooth",
+      },
+      title: {
+        text: "Sales Trend",
+        align: "left",
+      },
+      grid: {
+        borderColor: "#ccc",
+      },
+      markers: {
+        size: 1,
+      },
+      xaxis: {
+        categories: [],
+        title: {
+          text: "Date",
+        },
+      },
+      yaxis: {
+        title: {
+          text: "Sales",
+        },
+        min: 0,
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "right",
+        floating: true,
+        offsetY: -25,
+        offsetX: -5,
+      },
     },
     series: [{ name: "Sales", data: [] }],
   });
