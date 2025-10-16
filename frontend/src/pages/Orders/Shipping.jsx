@@ -106,7 +106,7 @@ const Shipping = () => {
           </div>
 
           <button
-            className="bg-pink-500 text-white py-2 px-4 rounded-full text-lg w-full"
+            className="bg-pink-500 text-white py-2 px-4 rounded-full text-lg w-full cursor-pointer"
             type="submit"
           >
             Continue

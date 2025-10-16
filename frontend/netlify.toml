@@ -1,0 +1,20 @@
+# This file configures the build settings and environment variables for your frontend.
+
+# --- Build Command ---
+# This command runs BEFORE 'npm run build'.
+# It creates a .env file on the fly and inserts the correct backend URL.
+[build]
+  command = "echo VITE_API_URL=https://deploy-preview-${REVIEW_ID}--sale-backend.netlify.app > .env && npm run build"
+
+# This command is for your main production site. It sets the production backend URL.
+[context.production]
+  command = "echo VITE_API_URL=https://sale-backend.netlify.app > .env && npm run build"
+
+
+# --- Redirects ---
+# This rule is still needed for your Single Page Application (SPA).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+

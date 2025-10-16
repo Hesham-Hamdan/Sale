@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store.js";
 import App from "./App.jsx";
 import "./index.css";
+import axios from "axios";
 
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -35,6 +36,8 @@ import OrderList from "./pages/Admin/OrderList.jsx";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
 import UserOrder from "./pages/User/UserOrder.jsx";
+
+axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter(
   createRoutesFromElements(
