@@ -1,6 +1,22 @@
+# This file configures the build settings and environment variables for your frontend.
+
 # This redirect rule is for your Single Page Application (SPA).
-# It ensures that all paths are served by index.html so React Router can handle them.
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# --- Environment Variables for Different Contexts ---
+
+# [context.production] is used for your main site (sale-frontend.netlify.app)
+[context.production.environment]
+  VITE_API_URL = "https://sale-backend.netlify.app"
+
+# [context.deploy-preview] is used for all pull request previews
+[context.deploy-preview.environment]
+  # This dynamically builds the correct backend preview URL.
+  # REVIEW_ID is a variable provided by Netlify that contains the pull request number.
+  VITE_API_URL = "https://deploy-preview-${REVIEW_ID}--sale-backend.netlify.app"
+
+    
+
