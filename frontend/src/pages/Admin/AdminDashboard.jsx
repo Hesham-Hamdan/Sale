@@ -162,7 +162,9 @@ const AdminDashboard = () => {
   const { data: sales, isLoading } = useGetTotalSalesQuery();
   const { data: customers, isLoading: loading } = useGetUsersQuery();
   const { data: orders, isLoading: loadingTwo } = useGetTotalOrdersQuery();
-  const { data: salesDetail } = useGetTotalSalesByDateQuery();
+  const { data: salesDetail } = useGetTotalSalesByDateQuery(undefined, {
+    pollingInterval: 30000, // Refetches data every 30 seconds
+  });
 
   const [state, setState] = useState({
     options: {
