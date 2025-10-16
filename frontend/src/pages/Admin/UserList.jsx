@@ -21,11 +21,6 @@ const UserList = () => {
   const [editableUserName, setEditableUserName] = useState("");
   const [editableUserEmail, setEditableUserEmail] = useState("");
 
-  // useEffect(() => {
-  //   //   refetch();
-  //   console.log(users);
-  // });
-
   const deleteHandler = async (id) => {
     if (window.confirm("Are you sure")) {
       try {
