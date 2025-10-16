@@ -65,34 +65,34 @@ connectDB();
 const app = express();
 
 // --- THE DEFINITIVE CORS FIX ---
-// This list contains the trusted domains.
 const whitelist = [
   "https://sale-frontend.netlify.app", // Your main production frontend
 ];
 
-// In development, or for deploy previews, we want to allow any deploy preview URL.
-// We use a regular expression to match any URL like: https://deploy-preview-NUMBER--sale-frontend.netlify.app
-if (process.env.NODE_ENV !== "production") {
+// THE FIX: Use Netlify's 'CONTEXT' variable instead of 'NODE_ENV'.
+// This is more reliable for detecting deploy previews.
+if (process.env.CONTEXT !== "production") {
   const deployPreviewPattern =
     /^https:\/\/deploy-preview-\d+--sale-frontend\.netlify\.app$/;
   whitelist.push(deployPreviewPattern);
 }
 
 const corsOptions = {
-  // The origin function checks if the request's origin is in our whitelist.
   origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
     if (
-      !origin ||
       whitelist.some((pattern) =>
         pattern instanceof RegExp ? pattern.test(origin) : pattern === origin
       )
     ) {
-      callback(null, true);
+      return callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      return callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true, // This is essential for sending cookies.
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -111,6 +111,10 @@ apiRouter.use("/orders", orderRoutes);
 apiRouter.get("/config/paypal", (req, res) => {
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
 });
+app.use("/api", apiRouter);
+
+module.exports.handler = ServerlessHttp(app);
+
 app.use("/api", apiRouter);
 
 module.exports.handler = ServerlessHttp(app);
