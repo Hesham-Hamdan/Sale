@@ -145,15 +145,14 @@
 
 // export default AdminDashboard;
 
-import Chart from "react-apexcharts";
 import { useGetUsersQuery } from "../../redux/api/usersApiSlice";
 import {
   useGetTotalOrdersQuery,
-  useGetTotalSalesByDateQuery,
+  // useGetTotalSalesByDateQuery,
   useGetTotalSalesQuery,
 } from "../../redux/api/orderApiSlice";
 
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import AdminMenu from "./AdminMenu";
 import OrderList from "./OrderList";
 import Loader from "../../components/Loader";
@@ -162,79 +161,79 @@ const AdminDashboard = () => {
   const { data: sales = [], isLoading } = useGetTotalSalesQuery();
   const { data: customers = [], isLoading: loading } = useGetUsersQuery();
   const { data: orders = [], isLoading: loadingTwo } = useGetTotalOrdersQuery();
-  const { data: salesDetail = [] } = useGetTotalSalesByDateQuery(undefined, {
-    pollingInterval: 30000, // Refetches data every 30 seconds
-  });
+  // const { data: salesDetail = [] } = useGetTotalSalesByDateQuery(undefined, {
+  //   pollingInterval: 30000, // Refetches data every 30 seconds
+  // });
 
-  const [state, setState] = useState({
-    options: {
-      chart: {
-        type: "line",
-      },
-      tooltip: {
-        theme: "dark",
-      },
-      colors: ["#00E396"],
-      dataLabels: {
-        enabled: true,
-      },
-      stroke: {
-        curve: "smooth",
-      },
-      title: {
-        text: "Sales Trend",
-        align: "left",
-      },
-      grid: {
-        borderColor: "#ccc",
-      },
-      markers: {
-        size: 1,
-      },
-      xaxis: {
-        categories: [],
-        title: {
-          text: "Date",
-        },
-      },
-      yaxis: {
-        title: {
-          text: "Sales",
-        },
-        min: 0,
-      },
-      legend: {
-        position: "top",
-        horizontalAlign: "right",
-        floating: true,
-        offsetY: -25,
-        offsetX: -5,
-      },
-    },
-    series: [{ name: "Sales", data: [] }],
-  });
+  // const [state, setState] = useState({
+  //   options: {
+  //     chart: {
+  //       type: "line",
+  //     },
+  //     tooltip: {
+  //       theme: "dark",
+  //     },
+  //     colors: ["#00E396"],
+  //     dataLabels: {
+  //       enabled: true,
+  //     },
+  //     stroke: {
+  //       curve: "smooth",
+  //     },
+  //     title: {
+  //       text: "Sales Trend",
+  //       align: "left",
+  //     },
+  //     grid: {
+  //       borderColor: "#ccc",
+  //     },
+  //     markers: {
+  //       size: 1,
+  //     },
+  //     xaxis: {
+  //       categories: [],
+  //       title: {
+  //         text: "Date",
+  //       },
+  //     },
+  //     yaxis: {
+  //       title: {
+  //         text: "Sales",
+  //       },
+  //       min: 0,
+  //     },
+  //     legend: {
+  //       position: "top",
+  //       horizontalAlign: "right",
+  //       floating: true,
+  //       offsetY: -25,
+  //       offsetX: -5,
+  //     },
+  //   },
+  //   series: [{ name: "Sales", data: [] }],
+  // });
 
-  useEffect(() => {
-    if (salesDetail) {
-      const formattedSalesDate = salesDetail.map((item) => ({
-        x: item._id,
-        y: item.totalSales,
-      }));
+  // useEffect(() => {
+  //   if (salesDetail) {
+  //     const formattedSalesDate = salesDetail.map((item) => ({
+  //       x: item._id,
+  //       y: item.totalSales,
+  //     }));
 
-      setState((prevState) => ({
-        ...prevState,
-        options: {
-          ...prevState.options,
-          xaxis: {
-            categories: formattedSalesDate.map((item) => item.x),
-          },
-        },
-        series: [
-          { name: "Sales", data: formattedSalesDate.map((item) => item.y) },
-        ],
-      }));
-    }
-  }, [salesDetail]);
+  //     setState((prevState) => ({
+  //       ...prevState,
+  //       options: {
+  //         ...prevState.options,
+  //         xaxis: {
+  //           categories: formattedSalesDate.map((item) => item.x),
+  //         },
+  //       },
+  //       series: [
+  //         { name: "Sales", data: formattedSalesDate.map((item) => item.y) },
+  //       ],
+  //     }));
+  //   }
+  // }, [salesDetail]);
 
   return (
     <>
@@ -277,14 +276,14 @@ const AdminDashboard = () => {
         </div>
 
         {/* CHART CONTAINER */}
-        <div className="mt-12 p-4 bg-black rounded-lg">
+        {/* <div className="mt-12 p-4 bg-black rounded-lg">
           <Chart
             options={state.options}
             series={state.series}
             type="bar"
             width="100%" // Let the chart fill its container
           />
-        </div>
+        </div> */}
 
         {/* ORDER LIST CONTAINER */}
         <div className="mt-12 p-4 bg-black rounded-lg w-full">
