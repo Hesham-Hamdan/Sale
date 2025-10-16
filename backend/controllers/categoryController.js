@@ -1,7 +1,5 @@
 const Category = require("../models/categoryModel.js");
 
-// Note: asyncHandler has been removed. 'express-async-errors' handles this automatically.
-
 const createCategory = async (req, res) => {
   try {
     const { name } = req.body;
