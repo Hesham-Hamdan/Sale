@@ -145,158 +145,6 @@
 
 // export default AdminDashboard;
 
-// import Chart from "react-apexcharts";
-// import { useGetUsersQuery } from "../../redux/api/usersApiSlice";
-// import {
-//   useGetTotalOrdersQuery,
-//   useGetTotalSalesByDateQuery,
-//   useGetTotalSalesQuery,
-// } from "../../redux/api/orderApiSlice";
-
-// import { useState, useEffect } from "react";
-// import AdminMenu from "./AdminMenu";
-// import OrderList from "./OrderList";
-// import Loader from "../../components/Loader";
-
-// const AdminDashboard = () => {
-//   const { data: sales = [], isLoading } = useGetTotalSalesQuery();
-//   const { data: customers = [], isLoading: loading } = useGetUsersQuery();
-//   const { data: orders = [], isLoading: loadingTwo } = useGetTotalOrdersQuery();
-//   const { data: salesDetail = [] } = useGetTotalSalesByDateQuery(undefined, {
-//     pollingInterval: 30000, // Refetches data every 30 seconds
-//   });
-
-//   const [state, setState] = useState({
-//     options: {
-//       chart: {
-//         type: "line",
-//       },
-//       tooltip: {
-//         theme: "dark",
-//       },
-//       colors: ["#00E396"],
-//       dataLabels: {
-//         enabled: true,
-//       },
-//       stroke: {
-//         curve: "smooth",
-//       },
-//       title: {
-//         text: "Sales Trend",
-//         align: "left",
-//       },
-//       grid: {
-//         borderColor: "#ccc",
-//       },
-//       markers: {
-//         size: 1,
-//       },
-//       xaxis: {
-//         categories: [],
-//         title: {
-//           text: "Date",
-//         },
-//       },
-//       yaxis: {
-//         title: {
-//           text: "Sales",
-//         },
-//         min: 0,
-//       },
-//       legend: {
-//         position: "top",
-//         horizontalAlign: "right",
-//         floating: true,
-//         offsetY: -25,
-//         offsetX: -5,
-//       },
-//     },
-//     series: [{ name: "Sales", data: [] }],
-//   });
-
-//   useEffect(() => {
-//     if (salesDetail) {
-//       const formattedSalesDate = salesDetail.map((item) => ({
-//         x: item._id,
-//         y: item.totalSales,
-//       }));
-
-//       setState((prevState) => ({
-//         ...prevState,
-//         options: {
-//           ...prevState.options,
-//           xaxis: {
-//             categories: formattedSalesDate.map((item) => item.x),
-//           },
-//         },
-//         series: [
-//           { name: "Sales", data: formattedSalesDate.map((item) => item.y) },
-//         ],
-//       }));
-//     }
-//   }, [salesDetail]);
-
-//   return (
-//     <>
-//       <AdminMenu />
-
-//       {/* MAIN CONTENT WRAPPER WITH RESPONSIVE PADDING */}
-//       <section className="p-4 pt-24 lg:ml-24 lg:pt-6">
-//         {/* STATS CARDS GRID */}
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//           {/* Sales Card */}
-//           <div className="rounded-lg bg-black p-5">
-//             <div className="font-bold rounded-full w-12 h-12 bg-pink-500 flex justify-center items-center text-xl">
-//               $
-//             </div>
-//             <p className="mt-5">Sales</p>
-//             <h1 className="text-2xl font-bold">
-//               $ {isLoading ? <Loader /> : sales?.totalSales.toFixed(2)}
-//             </h1>
-//           </div>
-//           {/* Customers Card */}
-//           <div className="rounded-lg bg-black p-5">
-//             <div className="font-bold rounded-full w-12 h-12 bg-pink-500 flex justify-center items-center text-xl">
-//               $
-//             </div>
-//             <p className="mt-5">Customers</p>
-//             <h1 className="text-2xl font-bold">
-//               {loading ? <Loader /> : customers?.length}
-//             </h1>
-//           </div>
-//           {/* Orders Card */}
-//           <div className="rounded-lg bg-black p-5">
-//             <div className="font-bold rounded-full w-12 h-12 bg-pink-500 flex justify-center items-center text-xl">
-//               $
-//             </div>
-//             <p className="mt-5">All Orders</p>
-//             <h1 className="text-2xl font-bold">
-//               {loadingTwo ? <Loader /> : orders?.totalOrders}
-//             </h1>
-//           </div>
-//         </div>
-
-//         {/* CHART CONTAINER */}
-//         <div className="mt-12 p-4 bg-black rounded-lg">
-//           <Chart
-//             options={state.options}
-//             series={state.series}
-//             type="bar"
-//             width="100%" // Let the chart fill its container
-//           />
-//         </div>
-
-//         {/* ORDER LIST CONTAINER */}
-//         <div className="mt-12 p-4 bg-black rounded-lg w-full">
-//           <OrderList />
-//         </div>
-//       </section>
-//     </>
-//   );
-// };
-
-// export default AdminDashboard;
-
 import Chart from "react-apexcharts";
 import { useGetUsersQuery } from "../../redux/api/usersApiSlice";
 import {
@@ -311,11 +159,12 @@ import OrderList from "./OrderList";
 import Loader from "../../components/Loader";
 
 const AdminDashboard = () => {
-  // THE FIX: Add fallbacks to the data destructuring to ensure the variables are never null.
-  const { data: sales, isLoading } = useGetTotalSalesQuery();
-  const { data: customers, isLoading: loading } = useGetUsersQuery();
-  const { data: orders, isLoading: loadingTwo } = useGetTotalOrdersQuery();
-  const { data: salesDetail } = useGetTotalSalesByDateQuery();
+  const { data: sales = [], isLoading } = useGetTotalSalesQuery();
+  const { data: customers = [], isLoading: loading } = useGetUsersQuery();
+  const { data: orders = [], isLoading: loadingTwo } = useGetTotalOrdersQuery();
+  const { data: salesDetail = [] } = useGetTotalSalesByDateQuery(undefined, {
+    pollingInterval: 30000, // Refetches data every 30 seconds
+  });
 
   const [state, setState] = useState({
     options: {
@@ -366,8 +215,7 @@ const AdminDashboard = () => {
   });
 
   useEffect(() => {
-    // THE FIX: Check that salesDetail is a valid array before trying to map over it.
-    if (salesDetail && Array.isArray(salesDetail)) {
+    if (salesDetail) {
       const formattedSalesDate = salesDetail.map((item) => ({
         x: item._id,
         y: item.totalSales,
@@ -392,8 +240,10 @@ const AdminDashboard = () => {
     <>
       <AdminMenu />
 
-      <section className="xl:ml-[4rem] md:ml-[0rem] p-4">
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* MAIN CONTENT WRAPPER WITH RESPONSIVE PADDING */}
+      <section className="p-4 pt-24 lg:ml-24 lg:pt-6">
+        {/* STATS CARDS GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Sales Card */}
           <div className="rounded-lg bg-black p-5">
             <div className="font-bold rounded-full w-12 h-12 bg-pink-500 flex justify-center items-center text-xl">
@@ -401,44 +251,43 @@ const AdminDashboard = () => {
             </div>
             <p className="mt-5">Sales</p>
             <h1 className="text-2xl font-bold">
-              {/* THE FIX: Use optional chaining and a fallback value */}${" "}
-              {isLoading ? <Loader /> : sales?.totalSales?.toFixed(2) || "0.00"}
+              $ {isLoading ? <Loader /> : sales?.totalSales.toFixed(2)}
             </h1>
           </div>
           {/* Customers Card */}
           <div className="rounded-lg bg-black p-5">
             <div className="font-bold rounded-full w-12 h-12 bg-pink-500 flex justify-center items-center text-xl">
-              👥
+              $
             </div>
             <p className="mt-5">Customers</p>
             <h1 className="text-2xl font-bold">
-              {/* THE FIX: Use optional chaining and a fallback value */}
-              {loading ? <Loader /> : customers?.length || 0}
+              {loading ? <Loader /> : customers?.length}
             </h1>
           </div>
           {/* Orders Card */}
           <div className="rounded-lg bg-black p-5">
             <div className="font-bold rounded-full w-12 h-12 bg-pink-500 flex justify-center items-center text-xl">
-              📦
+              $
             </div>
             <p className="mt-5">All Orders</p>
             <h1 className="text-2xl font-bold">
-              {/* THE FIX: Use a fallback value */}
-              {loadingTwo ? <Loader /> : orders?.totalOrders || 0}
+              {loadingTwo ? <Loader /> : orders?.totalOrders}
             </h1>
           </div>
         </div>
 
-        <div className="ml-0 lg:ml-[2rem] mt-12">
+        {/* CHART CONTAINER */}
+        <div className="mt-12 p-4 bg-black rounded-lg">
           <Chart
             options={state.options}
             series={state.series}
             type="bar"
-            width="95%"
+            width="100%" // Let the chart fill its container
           />
         </div>
 
-        <div className="mt-12">
+        {/* ORDER LIST CONTAINER */}
+        <div className="mt-12 p-4 bg-black rounded-lg w-full">
           <OrderList />
         </div>
       </section>
