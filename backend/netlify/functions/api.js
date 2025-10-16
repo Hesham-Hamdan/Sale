@@ -138,21 +138,36 @@ connectDB();
 
 const app = express();
 
-// --- THE FINAL CORS DEBUGGING STEP ---
-// We are temporarily removing the dynamic logic and hardcoding the URLs.
-// This is a test to force the correct configuration and break any caching issues.
-const allowedOrigins = [
+// --- Restoring the robust dynamic CORS configuration ---
+const whitelist = [
   "https://sale-frontend.netlify.app", // Your main production frontend
-  "https://deploy-preview-4--sale-frontend.netlify.app", // The specific preview causing issues
 ];
 
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
-// --- END CORS STEP ---
+// Use Netlify's 'CONTEXT' variable to dynamically allow deploy previews
+if (process.env.CONTEXT !== "production") {
+  const deployPreviewPattern =
+    /^https:\/\/deploy-preview-\d+--sale-frontend\.netlify\.app$/;
+  whitelist.push(deployPreviewPattern);
+}
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (
+      !origin ||
+      whitelist.some((pattern) =>
+        pattern instanceof RegExp ? pattern.test(origin) : pattern === origin
+      )
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+// --- End CORS Configuration ---
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -162,7 +177,8 @@ const apiRouter = express.Router();
 apiRouter.use("/users", userRoutes);
 apiRouter.use("/category", categoryRoutes);
 apiRouter.use("/products", productRoutes);
-api - router.use("/upload", uploadRoutes);
+// THE FIX: Corrected the typo from 'api-router' to 'apiRouter'
+apiRouter.use("/upload", uploadRoutes);
 apiRouter.use("/orders", orderRoutes);
 apiRouter.get("/config/paypal", (req, res) => {
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
