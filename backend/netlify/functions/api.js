@@ -24,7 +24,7 @@ const frontendURL = [
 
 app.use(
   cors({
-    origin: frontendURL, // Your live frontend URL
+    origin: frontendURL,
     credentials: true,
   })
 );
